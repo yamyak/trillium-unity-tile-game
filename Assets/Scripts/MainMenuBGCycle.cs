@@ -5,7 +5,7 @@ public class MainMenuBGCycle : MonoBehaviour
   public GameObject tile;
   public int side = 100;
   public float tileLength = 1.0f;
-  public float buffer = 0.25f;
+  public float tileBuffer = 0.25f;
 
   private float midPoint;
 
@@ -14,15 +14,17 @@ public class MainMenuBGCycle : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
+    Time.timeScale = 1;
+
     for (int i = 0; i < side; i++)
     {
       for (int j = 0; j < side; j++)
       {
-        Instantiate(tile, new Vector3((tileLength / 2) + (tileLength + buffer) * i, (tileLength / 2) + (tileLength + buffer) * j, 0), Quaternion.identity);
+        Instantiate(tile, new Vector3((tileLength / 2) + (tileLength + tileBuffer) * i, (tileLength / 2) + (tileLength + tileBuffer) * j, 0), Quaternion.identity);
       }
     }
 
-    midPoint = (((float)side * tileLength) + ((float)(side - 1) * buffer)) / 2;
+    midPoint = (((float)side * tileLength) + ((float)(side - 1) * tileBuffer)) / 2;
     float hypotenuse = Mathf.Sqrt(Mathf.Pow(midPoint, 2) * 2) * 1.3f;
     transform.position = new Vector3(midPoint + hypotenuse, midPoint, transform.position.z);
 

@@ -8,8 +8,8 @@ public class InitializeTiles : MonoBehaviour
 {
   public GameObject tile;
   public int side = 100;
-  public float sideLength = 1.0f;
-  public float buffer = 0.25f;
+  public float tileLength = 1.0f;
+  public float tileBuffer = 0.25f;
 
   private Map map;
 
@@ -22,7 +22,7 @@ public class InitializeTiles : MonoBehaviour
     {
       for(int j = 0; j < side; j++)
       {
-        GameObject obj = Instantiate(tile, new Vector3((sideLength + buffer) * i, (sideLength + buffer) * j, 0), Quaternion.identity);
+        GameObject obj = Instantiate(tile, new Vector3((tileLength / 2) + (tileLength + tileBuffer) * i, (tileLength / 2) + (tileLength + tileBuffer) * j, 0), Quaternion.identity);
         map.GetCell(i, j).SetObject(ref obj);        
       }
     }
