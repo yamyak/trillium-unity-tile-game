@@ -20,6 +20,7 @@ public class CameraMovement : MonoBehaviour
 
     sideLength = ((float)side * tileLength) + ((float)(side - 1) * tileBuffer);
 
+
     Quaternion myRotation = Quaternion.identity;
     myRotation.eulerAngles = new Vector3(-37.71f, 50.641f, -63.358f);
     transform.rotation = myRotation;
@@ -28,24 +29,24 @@ public class CameraMovement : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Input.GetKey(KeyCode.RightArrow))
+    if (Input.GetKey(KeyCode.D))
     {
       transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
     }
-    if (Input.GetKey(KeyCode.LeftArrow))
+    if (Input.GetKey(KeyCode.A))
     {
       transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
     }
-    if (Input.GetKey(KeyCode.DownArrow))
+    if (Input.GetKey(KeyCode.S))
     {
       transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
     }
-    if (Input.GetKey(KeyCode.UpArrow))
+    if (Input.GetKey(KeyCode.W))
     {
       transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
     }
 
-    if(transform.position.x < -10)
+    if (transform.position.x < -10)
     {
       transform.position = new Vector3(-10, transform.position.y, transform.position.z);
     }
