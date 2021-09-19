@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-using Assets.Scripts;
-
-public class InitializeTiles : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
-  public GameObject parent;
   public GameObject tile;
   public int side = 100;
   public float tileLength = 1.0f;
   public float tileBuffer = 0.25f;
 
-  private Map map;
+  private GameObject[,] grid;
+  public GameObject highlight;
 
   public float speed = 10f;
   private bool activeInput = true;
@@ -21,18 +17,21 @@ public class InitializeTiles : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    float midPoint = (((float)side * tileLength) + ((float)(side - 1) * tileBuffer)) / 2;
-    parent.transform.position = new Vector3(midPoint, midPoint, 0);
+    grid = new GameObject[side, side];
 
-    map = new Map(side, side);
+    highlight.GetComponent<SpriteRenderer>().color = Color.red;
+    highlight.SetActive(false);
+
+    float midPoint = (((float)side * tileLength) + ((float)(side - 1) * tileBuffer)) / 2;
+    this.transform.position = new Vector3(midPoint, midPoint, 0);
 
     for(int i = 0; i < side; i++)
     {
       for(int j = 0; j < side; j++)
       {
         GameObject obj = Instantiate(tile, new Vector3((tileLength / 2) + (tileLength + tileBuffer) * i, (tileLength / 2) + (tileLength + tileBuffer) * j, 0), Quaternion.identity);
-        obj.transform.parent = parent.transform;
-        map.GetCell(i, j).SetObject(ref obj);        
+        obj.transform.parent = this.transform;
+        grid[i, j] = obj;
       }
     }
 
@@ -40,7 +39,7 @@ public class InitializeTiles : MonoBehaviour
     {
       for (int j = 0; j < side; j++)
       {
-        map.GetCell(i, j).SetCellStatus(CellType.HIDDEN);
+        grid[i, j].GetComponent<Cell>().SetCellStatus(CellType.HIDDEN);
       }
     }
   }
@@ -56,7 +55,7 @@ public class InitializeTiles : MonoBehaviour
         direction = -1;
         activeInput = false;
 
-        parent.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
+        this.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
       }
       if (Input.GetKeyUp(KeyCode.Q))
       {
@@ -64,7 +63,7 @@ public class InitializeTiles : MonoBehaviour
         direction = 1;
         activeInput = false;
 
-        parent.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
+        this.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
       }
     }
     else
@@ -72,12 +71,17 @@ public class InitializeTiles : MonoBehaviour
       if(completedDegrees < 90)
       {
         completedDegrees += (Time.deltaTime * speed);
-        parent.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
+        this.transform.Rotate(new Vector3(0, 0, (Time.deltaTime * speed * direction)), Space.World);
       }
       else
       {
         activeInput = true;
       }
     }
-  } 
+  }
+  
+  public ref GameObject GetHighlight()
+  {
+    return ref highlight;
+  }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class MainMenuBGCycle : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
   public GameObject tile;
   public int side = 100;
@@ -10,6 +11,20 @@ public class MainMenuBGCycle : MonoBehaviour
   private float midPoint;
 
   public float speed = 5.0f;
+
+  public void LoadLevel(string levelName)
+  {
+    SceneManager.LoadScene(levelName);
+  }
+
+  public void QuitGame()
+  {
+    #if UNITY_EDITOR
+      UnityEditor.EditorApplication.isPlaying = false;
+    #else
+      Application.Quit();
+    #endif
+  }
 
   // Start is called before the first frame update
   void Start()

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour
 {
+  public GameObject map;
   public float cameraSpeed = 10;
 
   private float sideLength;
@@ -12,14 +10,11 @@ public class CameraMovement : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    InitializeTiles script = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<InitializeTiles>();
-
-    float side = script.side;
-    float tileLength = script.tileLength;
-    float tileBuffer = script.tileBuffer;
+    float side = map.GetComponent<MapManager>().side;
+    float tileLength = map.GetComponent<MapManager>().tileLength;
+    float tileBuffer = map.GetComponent<MapManager>().tileBuffer;
 
     sideLength = ((float)side * tileLength) + ((float)(side - 1) * tileBuffer);
-
 
     Quaternion myRotation = Quaternion.identity;
     myRotation.eulerAngles = new Vector3(-37.71f, 50.641f, -63.358f);

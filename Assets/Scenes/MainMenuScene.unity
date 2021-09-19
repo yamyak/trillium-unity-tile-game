@@ -206,8 +206,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1916060567}
-        m_TargetAssemblyTypeName: MainMenuButtons, Assembly-CSharp
+      - m_Target: {fileID: 519420030}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -292,14 +292,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c096bdcf3d35e2408417718f2f516d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 29e60adf725e8294daffff4f6f95fd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 2440859028152835265, guid: c7f46f6f75e0d8e4890430fe7972cc66, type: 3}
+  tile: {fileID: 8615689726722388672, guid: e343aabe27e51d14d98b845aea2d13dc, type: 3}
   side: 100
   tileLength: 1
-  buffer: 0.25
-  speed: 10
+  tileBuffer: 0.25
+  speed: 5
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1916060567}
-        m_TargetAssemblyTypeName: MainMenuButtons, Assembly-CSharp
+      - m_Target: {fileID: 519420030}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
         m_MethodName: LoadLevel
         m_Mode: 5
         m_Arguments:
@@ -1041,49 +1041,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &1916060565
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1916060566}
-  - component: {fileID: 1916060567}
-  m_Layer: 0
-  m_Name: MainMenuBehavior
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1916060566
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916060565}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 73.17728, y: 21.283497, z: -38.494568}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1916060567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916060565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29e60adf725e8294daffff4f6f95fd56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1991822016
 GameObject:
   m_ObjectHideFlags: 0
