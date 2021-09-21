@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+  public GameObject main;
+  public GameObject create;
+
   public GameObject tile;
   public int side = 100;
   public float tileLength = 1.0f;
@@ -26,9 +29,26 @@ public class MainMenuManager : MonoBehaviour
     #endif
   }
 
+  public void GoToMenu(string menuName)
+  {
+    if(menuName.Equals("Main"))
+    {
+      create.SetActive(false);
+      main.SetActive(true);
+    }
+    else if(menuName.Equals("Create"))
+    {
+      main.SetActive(false);
+      create.SetActive(true);
+    }
+  }
+
   // Start is called before the first frame update
   void Start()
   {
+    main.SetActive(true);
+    create.SetActive(false);
+
     Time.timeScale = 1;
 
     for (int i = 0; i < side; i++)
