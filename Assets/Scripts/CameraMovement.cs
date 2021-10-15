@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-  public GameObject map;
+  public GameObject game;
   public float cameraSpeed = 10;
 
   private float sideLength;
@@ -10,9 +10,9 @@ public class CameraMovement : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    float side = map.GetComponent<MapManager>().side;
-    float tileLength = map.GetComponent<MapManager>().tileLength;
-    float tileBuffer = map.GetComponent<MapManager>().tileBuffer;
+    float side = MainMenuManager.mapLength;
+    float tileLength = game.transform.Find("Map").GetComponent<MapManager>().tileLength;
+    float tileBuffer = game.transform.Find("Map").GetComponent<MapManager>().tileBuffer;
 
     sideLength = ((float)side * tileLength) + ((float)(side - 1) * tileBuffer);
 
@@ -24,21 +24,25 @@ public class CameraMovement : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Input.GetKey(KeyCode.D))
+    if (game.GetComponent<PlayManager>().GetState() != GameState.PAUSE &&
+      game.GetComponent<PlayManager>().GetState() != GameState.GAME_OVER)
     {
-      transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
-    }
-    if (Input.GetKey(KeyCode.A))
-    {
-      transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
-    }
-    if (Input.GetKey(KeyCode.S))
-    {
-      transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
-    }
-    if (Input.GetKey(KeyCode.W))
-    {
-      transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
+      if (Input.GetKey(KeyCode.D))
+      {
+        transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
+      }
+      if (Input.GetKey(KeyCode.A))
+      {
+        transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
+      }
+      if (Input.GetKey(KeyCode.S))
+      {
+        transform.Translate(new Vector3(-cameraSpeed * Time.deltaTime, -cameraSpeed * Time.deltaTime, 0), Space.World);
+      }
+      if (Input.GetKey(KeyCode.W))
+      {
+        transform.Translate(new Vector3(cameraSpeed * Time.deltaTime, cameraSpeed * Time.deltaTime, 0), Space.World);
+      }
     }
 
     if (transform.position.x < -10)

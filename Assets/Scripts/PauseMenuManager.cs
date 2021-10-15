@@ -3,30 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour
 {
-  private bool isPaused;
-  public GameObject pauseMenu;
-
-  public void Start()
-  {
-    isPaused = false;
-    pauseMenu.SetActive(false);
-  }
-
-  public void Update()
-  {
-    if(Input.GetKeyUp("escape"))
-    {
-      isPaused = !isPaused;
-      Time.timeScale = isPaused ? 0 : 1;
-      pauseMenu.SetActive(isPaused);
-    }
-  }
+  private static PlayManager.SetPauseStateCallback playCallback;
 
   public void Resume()
   {
-    isPaused = false;
-    pauseMenu.SetActive(false);
-    Time.timeScale = 1;
+    playCallback(GameState.PAUSE);
   }
 
   public void LoadLevel(string levelName)
@@ -41,5 +22,10 @@ public class PauseMenuManager : MonoBehaviour
     #else
       Application.Quit();
     #endif
+  }
+
+  public void SetCallback(PlayManager.SetPauseStateCallback callback)
+  {
+    playCallback = callback;
   }
 }

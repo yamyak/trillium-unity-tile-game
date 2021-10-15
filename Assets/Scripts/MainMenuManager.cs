@@ -7,10 +7,11 @@ public class MainMenuManager : MonoBehaviour
   public GameObject main;
   public GameObject create;
 
-  public Dropdown player1Type;
-  public Dropdown player1Color;
-  public Dropdown player2Type;
-  public Dropdown player2Color;
+  public Dropdown player1TypeDD;
+  public Dropdown player1ColorDD;
+  public Dropdown player2TypeDD;
+  public Dropdown player2ColorDD;
+  public Dropdown mapSizeDD;
 
   private Color lightRed;
   private Color red;
@@ -25,6 +26,11 @@ public class MainMenuManager : MonoBehaviour
   private float midPoint;
 
   public float speed = 5.0f;
+
+  public static string[] playerType = { "Human", "Computer" };
+  public static string[] playerColor = { "Red", "Blue" };
+
+  public static int mapLength = 100;
 
   public void LoadLevel(string levelName)
   {
@@ -87,14 +93,33 @@ public class MainMenuManager : MonoBehaviour
     lightBlue = new Color(0.3960785f, 0.627451f, 0.9215687f, 1.0f);
     blue = new Color(0.0f, 0.3058824f, 1.0f, 1.0f);
     
-    player1Color.onValueChanged.AddListener(delegate {
-      ChangeDropdownColor(player1Color.captionText.text, player1Type);
-      ChangeDropdownColor(player1Color.captionText.text, player1Color);
+    player1ColorDD.onValueChanged.AddListener(delegate {
+      playerColor[0] = player1ColorDD.captionText.text;
+
+      ChangeDropdownColor(player1ColorDD.captionText.text, player1TypeDD);
+      ChangeDropdownColor(player1ColorDD.captionText.text, player1ColorDD);
     });
 
-    player2Color.onValueChanged.AddListener(delegate {
-      ChangeDropdownColor(player2Color.captionText.text, player2Type);
-      ChangeDropdownColor(player2Color.captionText.text, player2Color);
+    player2ColorDD.onValueChanged.AddListener(delegate {
+      playerColor[1] = player2ColorDD.captionText.text;
+
+      ChangeDropdownColor(player2ColorDD.captionText.text, player2TypeDD);
+      ChangeDropdownColor(player2ColorDD.captionText.text, player2ColorDD);
+    });
+
+    player1TypeDD.onValueChanged.AddListener(delegate
+    {
+      playerType[0] = player1TypeDD.captionText.text;
+    });
+
+    player2TypeDD.onValueChanged.AddListener(delegate
+    {
+      playerType[1] = player2TypeDD.captionText.text;
+    });
+
+    mapSizeDD.onValueChanged.AddListener(delegate
+    {
+      mapLength = (mapSizeDD.value + 1) * 100;
     });
 
     Time.timeScale = 1;

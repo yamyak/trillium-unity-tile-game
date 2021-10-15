@@ -3,7 +3,6 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
   public GameObject tile;
-  public int side = 100;
   public float tileLength = 1.0f;
   public float tileBuffer = 0.25f;
 
@@ -17,6 +16,8 @@ public class MapManager : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
+    int side = MainMenuManager.mapLength;
+
     grid = new GameObject[side, side];
 
     highlight.GetComponent<SpriteRenderer>().color = Color.red;
