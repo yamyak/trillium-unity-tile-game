@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PieceManager : MonoBehaviour
+public class PieceScript : MonoBehaviour
 {
   private bool active;
   private int x;
@@ -46,7 +46,7 @@ public class PieceManager : MonoBehaviour
   {
     if (active)
     {
-      map.GetComponent<MapManager>().SetCellColor(x, y, color);
+      map.GetComponent<MapScript>().SetCellColor(x, y, color);
     }
   }
 
@@ -54,7 +54,7 @@ public class PieceManager : MonoBehaviour
   {
     if (active)
     {
-      map.GetComponent<MapManager>().SetCellColor(x, y, MapColor.WHITE);
+      map.GetComponent<MapScript>().SetCellColor(x, y, MapColor.WHITE);
     }
   }
 }

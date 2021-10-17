@@ -29,7 +29,7 @@ public class Player
       algorithm = new ComputerAlgorithm();
     }
 
-    GameObject piece = map.GetComponent<MapManager>().AddPieceToMap("Base", x, y, this.color, false);
+    GameObject piece = map.GetComponent<MapScript>().AddPieceToMap("Base", x, y, this.color, false);
     if(piece != null)
     {
       pieces.Add(piece);
@@ -40,7 +40,7 @@ public class Player
   {
     foreach(GameObject obj in pieces)
     {
-      obj.GetComponent<PieceManager>().SetActive(true);
+      obj.GetComponent<PieceScript>().SetActive(true);
     }
 
     handler = new Thread(new ThreadStart(algorithm.GetNextMove));

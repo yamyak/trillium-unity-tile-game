@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayManager : MonoBehaviour
+public class GameScript : MonoBehaviour
 {
   private GameObject map;
   public GameObject pauseMenu;
@@ -41,8 +41,8 @@ public class PlayManager : MonoBehaviour
     currentPlayer = 0;
 
     players = new Player[2];
-    players[0] = new Player(map, MainMenuManager.playerColor[0], MainMenuManager.playerType[0], 0, 0);
-    players[1] = new Player(map, MainMenuManager.playerColor[1], MainMenuManager.playerType[1], (MainMenuManager.mapLength - 1), (MainMenuManager.mapLength - 1));
+    players[0] = new Player(map, MainMenuScript.playerColor[0], MainMenuScript.playerType[0], 0, 0);
+    players[1] = new Player(map, MainMenuScript.playerColor[1], MainMenuScript.playerType[1], (MainMenuScript.mapLength - 1), (MainMenuScript.mapLength - 1));
   }
 
   // Update is called once per frame

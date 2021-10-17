@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
+public class CameraScript : MonoBehaviour
 {
   private float sideLength;
 
@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
   {
     stateManager = StateManager.GetInstance();
 
-    float side = MainMenuManager.mapLength;
+    float side = MainMenuScript.mapLength;
 
     sideLength = ((float)side * Constants.tileLength) + ((float)(side - 1) * Constants.tileBuffer);
 

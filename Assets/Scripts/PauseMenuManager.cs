@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour
 {
-  private static PlayManager.SetPauseStateCallback playCallback;
+  private static GameScript.SetPauseStateCallback playCallback;
 
   public void Resume()
   {
@@ -24,7 +24,7 @@ public class PauseMenuManager : MonoBehaviour
     #endif
   }
 
-  public void SetCallback(PlayManager.SetPauseStateCallback callback)
+  public void SetCallback(GameScript.SetPauseStateCallback callback)
   {
     playCallback = callback;
   }

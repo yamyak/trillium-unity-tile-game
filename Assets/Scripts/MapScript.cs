@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapScript : MonoBehaviour
 {
   public GameObject tile;
 
@@ -21,7 +21,7 @@ public class MapManager : MonoBehaviour
 
   public void MovePieceOnMap(int xOld, int yOld, int xNew, int yNew)
   {
-    grid[xOld, yOld, 1].GetComponent<PieceManager>().SetLocation(xNew, yNew);
+    grid[xOld, yOld, 1].GetComponent<PieceScript>().SetLocation(xNew, yNew);
     grid[xNew, yNew, 1] = grid[xOld, yOld, 1];
     grid[xOld, yOld, 1] = null;
 
@@ -39,10 +39,10 @@ public class MapManager : MonoBehaviour
 
     if(piece != null)
     {
-      piece.GetComponent<PieceManager>().Intialize(active, this.gameObject, color);
+      piece.GetComponent<PieceScript>().Intialize(active, this.gameObject, color);
 
       grid[x, y, 1] = piece;
-      grid[x, y, 1].GetComponent<PieceManager>().SetLocation(x, y);
+      grid[x, y, 1].GetComponent<PieceScript>().SetLocation(x, y);
     }
 
     return piece;
@@ -57,7 +57,7 @@ public class MapManager : MonoBehaviour
   void Start()
   {
     stateManager = StateManager.GetInstance();
-    int side = MainMenuManager.mapLength;
+    int side = MainMenuScript.mapLength;
 
     grid = new GameObject[side, side, 2];
 
