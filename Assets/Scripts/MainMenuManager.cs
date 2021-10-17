@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,22 +14,12 @@ public class MainMenuManager : MonoBehaviour
   public Dropdown player2ColorDD;
   public Dropdown mapSizeDD;
 
-  private Color lightRed;
-  private Color red;
-  private Color lightBlue;
-  private Color blue;
-
   public GameObject tile;
-  public int side = 100;
-  public float tileLength = 1.0f;
-  public float tileBuffer = 0.25f;
 
   private float midPoint;
 
-  public float speed = 5.0f;
-
   public static string[] playerType = { "Human", "Computer" };
-  public static string[] playerColor = { "Red", "Blue" };
+  public static MapColor[] playerColor = { MapColor.RED, MapColor.BLUE };
 
   public static int mapLength = 100;
 
@@ -66,17 +57,17 @@ public class MainMenuManager : MonoBehaviour
 
     if (text.Equals("Red"))
     {
-      block.normalColor = lightRed;
-      block.selectedColor = lightRed;
-      block.highlightedColor = red;
+      block.normalColor = Constants.lightRed;
+      block.selectedColor = Constants.lightRed;
+      block.highlightedColor = Constants.red;
 
       drop.colors = block;
     }
     else if (text.Equals("Blue"))
     {
-      block.normalColor = lightBlue;
-      block.selectedColor = lightBlue;
-      block.highlightedColor = blue;
+      block.normalColor = Constants.lightBlue;
+      block.selectedColor = Constants.lightBlue;
+      block.highlightedColor = Constants.blue;
 
       drop.colors = block;
     }
@@ -87,21 +78,16 @@ public class MainMenuManager : MonoBehaviour
   {
     main.SetActive(true);
     create.SetActive(false);
-
-    lightRed = new Color(0.9607844f, 0.4117647f, 0.4117647f, 1.0f);
-    red = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-    lightBlue = new Color(0.3960785f, 0.627451f, 0.9215687f, 1.0f);
-    blue = new Color(0.0f, 0.3058824f, 1.0f, 1.0f);
     
     player1ColorDD.onValueChanged.AddListener(delegate {
-      playerColor[0] = player1ColorDD.captionText.text;
+      playerColor[0] = (MapColor)Enum.Parse(typeof(MapColor), player1ColorDD.captionText.text, true);
 
       ChangeDropdownColor(player1ColorDD.captionText.text, player1TypeDD);
       ChangeDropdownColor(player1ColorDD.captionText.text, player1ColorDD);
     });
 
     player2ColorDD.onValueChanged.AddListener(delegate {
-      playerColor[1] = player2ColorDD.captionText.text;
+      playerColor[1] = (MapColor)Enum.Parse(typeof(MapColor), player2ColorDD.captionText.text, true);
 
       ChangeDropdownColor(player2ColorDD.captionText.text, player2TypeDD);
       ChangeDropdownColor(player2ColorDD.captionText.text, player2ColorDD);
@@ -124,15 +110,16 @@ public class MainMenuManager : MonoBehaviour
 
     Time.timeScale = 1;
 
-    for (int i = 0; i < side; i++)
+    for (int i = 0; i < Constants.mainMenuMapSize; i++)
     {
-      for (int j = 0; j < side; j++)
+      for (int j = 0; j < Constants.mainMenuMapSize; j++)
       {
-        Instantiate(tile, new Vector3((tileLength / 2) + (tileLength + tileBuffer) * i, (tileLength / 2) + (tileLength + tileBuffer) * j, 0), Quaternion.identity);
+        Instantiate(tile, new Vector3((Constants.tileLength / 2) + (Constants.tileLength + Constants.tileBuffer) * i, 
+          (Constants.tileLength / 2) + (Constants.tileLength + Constants.tileBuffer) * j, 0), Quaternion.identity);
       }
     }
 
-    midPoint = (((float)side * tileLength) + ((float)(side - 1) * tileBuffer)) / 2;
+    midPoint = (((float)Constants.mainMenuMapSize * Constants.tileLength) + ((float)(Constants.mainMenuMapSize - 1) * Constants.tileBuffer)) / 2;
     float hypotenuse = Mathf.Sqrt(Mathf.Pow(midPoint, 2) * 2) * 1.3f;
     transform.position = new Vector3(midPoint + hypotenuse, midPoint, transform.position.z);
 
@@ -144,6 +131,6 @@ public class MainMenuManager : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    transform.RotateAround(new Vector3(midPoint, midPoint, 0), Vector3.back, speed * Time.deltaTime);
+    transform.RotateAround(new Vector3(midPoint, midPoint, 0), Vector3.back, Constants.mainMenuBgSpeed * Time.deltaTime);
   }
 }

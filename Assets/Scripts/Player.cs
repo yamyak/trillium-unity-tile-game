@@ -4,24 +4,21 @@ using System.Collections.Generic;
 
 public class Player
 {
+  private GameObject map;
+
   List<GameObject> pieces;
-  private Color highlight;
+
+  private MapColor color;
 
   Thread handler;
   BaseAlgorithm algorithm;
 
-  public Player(string color, string algo)
+  public Player(GameObject map, MapColor color, string algo, int x, int y)
   {
+    this.map = map;
     pieces = new List<GameObject>();
 
-    if(color == "Red")
-    {
-      highlight = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-    }
-    else if(color == "Blue")
-    {
-      highlight = new Color(0.0f, 0.3058824f, 1.0f, 1.0f);
-    }
+    this.color = color;
 
     if(algo == "Human")
     {
@@ -31,10 +28,21 @@ public class Player
     {
       algorithm = new ComputerAlgorithm();
     }
+
+    GameObject piece = map.GetComponent<MapManager>().AddPieceToMap("Base", x, y, this.color, false);
+    if(piece != null)
+    {
+      pieces.Add(piece);
+    }
   }
 
   public void ProcessMove()
   {
+    foreach(GameObject obj in pieces)
+    {
+      obj.GetComponent<PieceManager>().SetActive(true);
+    }
+
     handler = new Thread(new ThreadStart(algorithm.GetNextMove));
     handler.Start();
   }

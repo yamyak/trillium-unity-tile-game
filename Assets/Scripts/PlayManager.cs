@@ -1,63 +1,48 @@
 using UnityEngine;
 
-public enum GameState
-{
-  READY,
-  PLAYING,
-  PAUSE,
-  GAME_OVER
-}
-
 public class PlayManager : MonoBehaviour
 {
+  private GameObject map;
   public GameObject pauseMenu;
 
-  public GameObject basicPiece;
+  StateManager stateManager;
 
-  private GameState currentState;
-  private GameState savedState;
   private int currentPlayer;
 
   Player[] players;
 
-  public delegate void SetPauseStateCallback(GameState state);
+  public delegate void SetPauseStateCallback();
 
-  void SetPauseState(GameState state)
+  void SetPauseState()
   {
-    if (currentState == GameState.PAUSE)
+    if (stateManager.GetState() == GameState.PAUSE)
     {
-      currentState = savedState;
+      stateManager.RevertToLastState();
       Time.timeScale = 1;
       pauseMenu.SetActive(false);
     }
-    else if (currentState != GameState.GAME_OVER)
+    else if (stateManager.GetState() != GameState.GAME_OVER)
     {
-      savedState = currentState;
-      currentState = GameState.PAUSE;
+      stateManager.SetState(GameState.PAUSE);
       Time.timeScale = 0;
       pauseMenu.SetActive(true);
     }
   }
 
-  public GameState GetState()
-  {
-    return currentState;
-  }
-
   // Start is called before the first frame update
   void Start()
   {
-    currentState = GameState.READY;
-    currentPlayer = 0;
-
-    players = new Player[2];
-    for(int i = 0; i < 2; i++)
-    {
-      players[i] = new Player(MainMenuManager.playerColor[i], MainMenuManager.playerType[i]);
-    }
+    stateManager = StateManager.GetInstance();
+    map = transform.Find("Map").gameObject;
 
     pauseMenu.GetComponent<PauseMenuManager>().SetCallback(SetPauseState);
     pauseMenu.SetActive(false);
+
+    currentPlayer = 0;
+
+    players = new Player[2];
+    players[0] = new Player(map, MainMenuManager.playerColor[0], MainMenuManager.playerType[0], 0, 0);
+    players[1] = new Player(map, MainMenuManager.playerColor[1], MainMenuManager.playerType[1], (MainMenuManager.mapLength - 1), (MainMenuManager.mapLength - 1));
   }
 
   // Update is called once per frame
@@ -65,12 +50,12 @@ public class PlayManager : MonoBehaviour
   {
     if (Input.GetKeyUp("escape"))
     {
-      SetPauseState(currentState);
+      SetPauseState();
     }
 
-    if(currentState == GameState.READY)
+    if(stateManager.GetState() == GameState.READY)
     {
-      currentState = GameState.PLAYING;
+      stateManager.SetState(GameState.PLAYING);
       players[currentPlayer].ProcessMove();
     }
   }

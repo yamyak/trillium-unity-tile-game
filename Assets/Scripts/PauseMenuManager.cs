@@ -7,7 +7,7 @@ public class PauseMenuManager : MonoBehaviour
 
   public void Resume()
   {
-    playCallback(GameState.PAUSE);
+    playCallback();
   }
 
   public void LoadLevel(string levelName)
