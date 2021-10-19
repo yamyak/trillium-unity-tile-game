@@ -17,6 +17,18 @@ public enum GameState
   GAME_OVER
 }
 
+public struct Location
+{
+  public Location(int x, int y)
+  {
+    this.x = x;
+    this.y = y;
+  }
+
+  public int x;
+  public int y;
+}
+
 public static class Constants
 {
   //public float cameraSpeed = 10;

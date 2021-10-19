@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenuManager : MonoBehaviour
+public class PauseMenuScript : MonoBehaviour
 {
   private static GameScript.SetPauseStateCallback playCallback;
 

@@ -35,7 +35,7 @@ public class GameScript : MonoBehaviour
     stateManager = StateManager.GetInstance();
     map = transform.Find("Map").gameObject;
 
-    pauseMenu.GetComponent<PauseMenuManager>().SetCallback(SetPauseState);
+    pauseMenu.GetComponent<PauseMenuScript>().SetCallback(SetPauseState);
     pauseMenu.SetActive(false);
 
     currentPlayer = 0;

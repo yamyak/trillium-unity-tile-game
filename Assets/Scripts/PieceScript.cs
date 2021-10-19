@@ -1,18 +1,20 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PieceScript : MonoBehaviour
 {
-  private bool active;
   private int x;
   private int y;
   private MapColor color;
 
   private GameObject map;
 
+  public List<Location> moveLocations;
+  public List<Location> attackLocations;
+
   // Start is called before the first frame update
   void Start()
   {
-    active = false;
   }
 
   // Update is called once per frame
@@ -23,11 +25,8 @@ public class PieceScript : MonoBehaviour
 
   public void Intialize(bool active, GameObject map, MapColor color)
   {
-    this.active = active;
     this.map = map;
     this.color = color;
-
-    transform.Find("Highlight").GetComponent<SpriteRenderer>().color = Constants.EnumToHighlightColor(color);
   }
 
   public void SetLocation(int x, int y)
@@ -38,23 +37,18 @@ public class PieceScript : MonoBehaviour
 
   public void SetActive(bool flag)
   {
-    active = flag;
-    transform.Find("Highlight").gameObject.SetActive(flag);
+    this.GetComponent<BoxCollider>().enabled = flag;
+    map.GetComponent<MapScript>().SetHighlightColor(x, y, color);
+    map.GetComponent<MapScript>().ActivateHighlight(x, y, flag);
   }
 
   void OnMouseEnter()
   {
-    if (active)
-    {
-      map.GetComponent<MapScript>().SetCellColor(x, y, color);
-    }
+    map.GetComponent<MapScript>().SetCellColor(x, y, color);
   }
 
   private void OnMouseExit()
   {
-    if (active)
-    {
-      map.GetComponent<MapScript>().SetCellColor(x, y, MapColor.WHITE);
-    }
+    map.GetComponent<MapScript>().SetCellColor(x, y, MapColor.WHITE);
   }
 }

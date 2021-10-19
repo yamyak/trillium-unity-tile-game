@@ -50,7 +50,17 @@ public class MapScript : MonoBehaviour
 
   public void SetCellColor(int x, int y, MapColor color)
   {
-    grid[x, y, 0].GetComponent<Cell>().SetCellColor(color);
+    grid[x, y, 0].GetComponent<TileScript>().SetCellColor(color);
+  }
+
+  public void SetHighlightColor(int x, int y, MapColor color)
+  {
+    grid[x, y, 0].GetComponent<TileScript>().SetHighlightColor(color);
+  }
+
+  public void ActivateHighlight(int x, int y, bool active)
+  {
+    grid[x, y, 0].GetComponent<TileScript>().ActivateHighlight(active);
   }
 
   // Start is called before the first frame update
@@ -70,7 +80,7 @@ public class MapScript : MonoBehaviour
       {
         GameObject obj = Instantiate(tile, CalculateLocation(i, j, 0), Quaternion.identity);
         obj.transform.parent = this.transform;
-        obj.GetComponent<Cell>().SetCellColor(MapColor.WHITE);
+        obj.GetComponent<TileScript>().SetCellColor(MapColor.WHITE);
         grid[i, j, 0] = obj;
         grid[i, j, 1] = null;
       }

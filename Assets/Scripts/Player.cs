@@ -32,7 +32,7 @@ public class Player
     GameObject piece = map.GetComponent<MapScript>().AddPieceToMap("Base", x, y, this.color, false);
     if(piece != null)
     {
-      pieces.Add(piece);
+      AddPiece(piece);
     }
   }
 
