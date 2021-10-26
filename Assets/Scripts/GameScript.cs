@@ -1,13 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
 {
   private GameObject map;
+
+  public GameObject statusMenu;
   public GameObject pauseMenu;
 
   StateManager stateManager;
 
   private int currentPlayer;
+  private Text playerNumber;
 
   Player[] players;
 
@@ -38,7 +42,8 @@ public class GameScript : MonoBehaviour
     pauseMenu.GetComponent<PauseMenuScript>().SetCallback(SetPauseState);
     pauseMenu.SetActive(false);
 
-    currentPlayer = 0;
+    playerNumber = statusMenu.transform.Find("Status Panel/Turn Number").GetComponent<Text>();
+    currentPlayer = 1;
 
     players = new Player[2];
     players[0] = new Player(map, MainMenuScript.playerColor[0], MainMenuScript.playerType[0], 0, 0);
@@ -56,7 +61,8 @@ public class GameScript : MonoBehaviour
     if(stateManager.GetState() == GameState.READY)
     {
       stateManager.SetState(GameState.PLAYING);
-      players[currentPlayer].ProcessMove();
+      playerNumber.text = currentPlayer.ToString();
+      players[currentPlayer - 1].ProcessMove();
     }
   }
 }
