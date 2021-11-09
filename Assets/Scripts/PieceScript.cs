@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -7,20 +8,24 @@ public class PieceScript : MonoBehaviour
   private int y;
   private MapColor color;
 
+  private bool active;
+
+  private StateManager stateManager;
   private GameObject map;
 
+  public string pieceName;
   public List<Location> moveLocations;
   public List<Location> attackLocations;
 
   // Start is called before the first frame update
   void Start()
   {
+    stateManager = StateManager.GetInstance();
   }
 
   // Update is called once per frame
   void Update()
   {
-    
   }
 
   public void Intialize(bool active, GameObject map, MapColor color)
@@ -37,6 +42,7 @@ public class PieceScript : MonoBehaviour
 
   public void SetActive(bool flag)
   {
+    active = flag;
     this.GetComponent<BoxCollider>().enabled = flag;
     map.GetComponent<MapScript>().SetHighlightColor(x, y, color);
     map.GetComponent<MapScript>().ActivateHighlight(x, y, flag);
@@ -47,8 +53,22 @@ public class PieceScript : MonoBehaviour
     map.GetComponent<MapScript>().SetCellColor(x, y, color);
   }
 
-  private void OnMouseExit()
+  void OnMouseExit()
   {
     map.GetComponent<MapScript>().SetCellColor(x, y, MapColor.WHITE);
+  }
+
+  void OnMouseOver()
+  {
+    if(Input.GetMouseButtonDown(0) && stateManager.GetState() == GameState.PLAYING_BASIC)
+    {
+      stateManager.SetCurrentPiece(this.gameObject);
+      stateManager.SetState(GameState.PLAYING_ACTION);
+    }
+  }
+
+  public string GetPieceName()
+  {
+    return pieceName;
   }
 }

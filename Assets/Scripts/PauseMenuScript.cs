@@ -3,11 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuScript : MonoBehaviour
 {
-  private static GameScript.SetPauseStateCallback playCallback;
+  private GameObject pauseMenu;
 
   public void Resume()
   {
-    playCallback();
+    StateManager.GetInstance().RevertToLastState();
   }
 
   public void LoadLevel(string levelName)
@@ -17,15 +17,32 @@ public class PauseMenuScript : MonoBehaviour
 
   public void QuitGame()
   {
-    #if UNITY_EDITOR
-      UnityEditor.EditorApplication.isPlaying = false;
-    #else
+#if UNITY_EDITOR
+    UnityEditor.EditorApplication.isPlaying = false;
+#else
       Application.Quit();
-    #endif
+#endif
   }
 
-  public void SetCallback(GameScript.SetPauseStateCallback callback)
+  public void OnEnterPauseState()
   {
-    playCallback = callback;
+    Time.timeScale = 0;
+    pauseMenu.SetActive(true);
+  }
+
+  public void OnExitPauseState()
+  {
+    Time.timeScale = 1;
+    pauseMenu.SetActive(false);
+  }
+
+  // Start is called before the first frame update
+  void Start()
+  {
+    pauseMenu = transform.Find("Pause Menu").gameObject;
+    pauseMenu.SetActive(false);
+
+    StateManager.GetInstance().AddCallback(CallbackType.STATE_ENTER, GameState.PAUSE, OnEnterPauseState);
+    StateManager.GetInstance().AddCallback(CallbackType.STATE_EXIT, GameState.PAUSE, OnExitPauseState);
   }
 }

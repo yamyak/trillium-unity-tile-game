@@ -12,9 +12,17 @@ public enum MapColor
 public enum GameState
 {
   READY,
-  PLAYING,
+  PLAYING_BASIC,
+  PLAYING_ACTION,
   PAUSE,
   GAME_OVER
+}
+
+public enum CallbackType
+{
+  STATE_ENTER,
+  STATE_EXIT,
+  STATE_CHANGE
 }
 
 public struct Location
@@ -46,6 +54,8 @@ public static class Constants
 
   public static float cameraSpeed = 10f;
   public static float mapRotationSpeed = 10f;
+
+  public delegate void StateChangeCallback();
 
   public static Color EnumToHighlightColor(MapColor colorIn)
   {

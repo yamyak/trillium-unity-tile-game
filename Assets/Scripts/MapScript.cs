@@ -8,7 +8,7 @@ public class MapScript : MonoBehaviour
   public GameObject basePiece;
 
   private GameObject[,,] grid;
-  StateManager stateManager;
+  private StateManager stateManager;
 
   private bool activeInput = true;
   private float completedDegrees, direction;

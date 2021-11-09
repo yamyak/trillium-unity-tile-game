@@ -43,8 +43,15 @@ public class Player
       obj.GetComponent<PieceScript>().SetActive(true);
     }
 
-    handler = new Thread(new ThreadStart(algorithm.GetNextMove));
-    handler.Start();
+    //handler = new Thread(new ThreadStart(RunAlgorithm));
+    //handler.Start();
+  }
+
+  private void RunAlgorithm()
+  {
+    algorithm.GetNextMove();
+
+    StateManager.GetInstance().SetState(GameState.READY);
   }
 
   public void AddPiece(GameObject piece)

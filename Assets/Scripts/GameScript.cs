@@ -3,34 +3,21 @@ using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
 {
+  private StateManager stateManager;
   private GameObject map;
-
-  public GameObject statusMenu;
-  public GameObject pauseMenu;
-
-  StateManager stateManager;
-
-  private int currentPlayer;
-  private Text playerNumber;
 
   Player[] players;
 
-  public delegate void SetPauseStateCallback();
-
-  void SetPauseState()
+  public void OnEnterPlayingBasicState()
   {
-    if (stateManager.GetState() == GameState.PAUSE)
-    {
-      stateManager.RevertToLastState();
-      Time.timeScale = 1;
-      pauseMenu.SetActive(false);
-    }
-    else if (stateManager.GetState() != GameState.GAME_OVER)
-    {
-      stateManager.SetState(GameState.PAUSE);
-      Time.timeScale = 0;
-      pauseMenu.SetActive(true);
-    }
+    int currentPlayer = stateManager.GetCurrentPlayer();
+    players[currentPlayer - 1].ProcessMove();
+  }
+
+  public void OnEnterReadyState()
+  {
+    stateManager.SwitchToNextPlayer();
+    stateManager.SetState(GameState.PLAYING_BASIC);
   }
 
   // Start is called before the first frame update
@@ -39,30 +26,32 @@ public class GameScript : MonoBehaviour
     stateManager = StateManager.GetInstance();
     map = transform.Find("Map").gameObject;
 
-    pauseMenu.GetComponent<PauseMenuScript>().SetCallback(SetPauseState);
-    pauseMenu.SetActive(false);
-
-    playerNumber = statusMenu.transform.Find("Status Panel/Turn Number").GetComponent<Text>();
-    currentPlayer = 1;
-
     players = new Player[2];
     players[0] = new Player(map, MainMenuScript.playerColor[0], MainMenuScript.playerType[0], 0, 0);
     players[1] = new Player(map, MainMenuScript.playerColor[1], MainMenuScript.playerType[1], (MainMenuScript.mapLength - 1), (MainMenuScript.mapLength - 1));
+
+    
+    stateManager.AddCallback(CallbackType.STATE_ENTER, GameState.PLAYING_BASIC, OnEnterPlayingBasicState);
+    stateManager.AddCallback(CallbackType.STATE_ENTER, GameState.READY, OnEnterReadyState);
+
+    stateManager.SetState(GameState.PLAYING_BASIC);
   }
 
   // Update is called once per frame
   void Update()
   {
+    GameState currentState = stateManager.GetState();
+
     if (Input.GetKeyUp("escape"))
     {
-      SetPauseState();
-    }
-
-    if(stateManager.GetState() == GameState.READY)
-    {
-      stateManager.SetState(GameState.PLAYING);
-      playerNumber.text = currentPlayer.ToString();
-      players[currentPlayer - 1].ProcessMove();
+      if(currentState != GameState.PAUSE)
+      {
+        stateManager.SetState(GameState.PAUSE);
+      }
+      else
+      {
+        stateManager.RevertToLastState();
+      }
     }
   }
 }
