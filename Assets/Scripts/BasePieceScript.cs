@@ -8,19 +8,31 @@ public class BasePieceScript : PieceScript
   {
     stateManager = StateManager.GetInstance();
 
-    options = new List<Option>();
+    baseOption = new Option();
+    baseOption.parentOption = null;
 
-    Option attack = new Option { optionName = "Attack", parentOption = null, callback = AttackCallback };
-    Option move = new Option { optionName = "Move", parentOption = null, callback = MoveCallback };
-    Option special = new Option { optionName = "Special", parentOption = null, callback = SpecialCallback };
-    Option item = new Option { optionName = "Item", parentOption = null, callback = ItemCallback };
-    Option heal = new Option { optionName = "Heal", parentOption = null, callback = HealCallback };
 
-    options.Add(attack);
-    options.Add(move);
-    options.Add(special);
-    options.Add(item);
-    options.Add(heal);
+    Option attack = new Option { optionName = "Attack", parentOption = baseOption, callback = AttackCallback };
+    Option move = new Option { optionName = "Move", parentOption = baseOption, callback = MoveCallback };
+    Option special = new Option { optionName = "Special", parentOption = baseOption, callback = SpecialCallback };
+    Option item = new Option { optionName = "Item", parentOption = baseOption, callback = ItemCallback };
+    Option heal = new Option { optionName = "Heal", parentOption = baseOption, callback = HealCallback };
+
+    Option suboption1 = new Option { optionName = "Test 1", parentOption = item, callback = AttackCallback };
+    Option suboption2 = new Option { optionName = "Test 2", parentOption = item, callback = AttackCallback };
+    Option suboption3 = new Option { optionName = "Test 3", parentOption = item, callback = AttackCallback };
+
+    item.subOptions = new List<Option>();
+    item.subOptions.Add(suboption1);
+    item.subOptions.Add(suboption2);
+    item.subOptions.Add(suboption3);
+
+    baseOption.subOptions = new List<Option>();
+    baseOption.subOptions.Add(attack);
+    baseOption.subOptions.Add(move);
+    baseOption.subOptions.Add(special);
+    baseOption.subOptions.Add(item);
+    baseOption.subOptions.Add(heal);
   }
 
   public void AttackCallback()

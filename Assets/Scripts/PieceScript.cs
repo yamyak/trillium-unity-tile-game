@@ -14,14 +14,15 @@ public class PieceScript : MonoBehaviour
 
   public string pieceName;
 
-  protected List<Option> options;
+  protected Option baseOption;
 
   // Start is called before the first frame update
   void Start()
   {
     stateManager = StateManager.GetInstance();
 
-    options = new List<Option>();
+    baseOption = new Option();
+    baseOption.parentOption = null;
   }
 
   public void Intialize(bool active, GameObject map, MapColor color)
@@ -63,8 +64,8 @@ public class PieceScript : MonoBehaviour
     }
   }
 
-  public List<Option> GetOptions()
+  public Option GetOption()
   {
-    return options;
+    return baseOption;
   }
 }

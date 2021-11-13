@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class ActionMenuScript : MonoBehaviour
 {
@@ -19,27 +17,39 @@ public class ActionMenuScript : MonoBehaviour
 
   private int currentFrame;
   private int totalFrames;
-  Option currentSelection;
-  List<Option> currentOptionList;
+  private Option currentOption;
 
   public void SelectSlot1()
   {
-    slotCallbacks[0]();
+    if(!StepIntoChildOption(0))
+    {
+      slotCallbacks[0]();
+    }
   }
 
   public void SelectSlot2()
   {
-    slotCallbacks[1]();
+
+    if (!StepIntoChildOption(1))
+    {
+      slotCallbacks[1]();
+    }
   }
 
   public void SelectSlot3()
   {
-    slotCallbacks[2]();
+    if (!StepIntoChildOption(2))
+    {
+      slotCallbacks[2]();
+    }
   }
 
   public void SelectSlot4()
   {
-    slotCallbacks[3]();
+    if (!StepIntoChildOption(3))
+    {
+      slotCallbacks[3]();
+    }
   }
 
   private void UpdateUpDownButtons()
@@ -67,11 +77,11 @@ public class ActionMenuScript : MonoBehaviour
   {
     int buttonIndex = 0;
     int frameStart = Constants.actionMenuNumButtons * currentFrame;
-    for (int i = frameStart; (buttonIndex < Constants.actionMenuNumButtons) && (i < currentOptionList.Count); i++, buttonIndex++)
+    for (int i = frameStart; (buttonIndex < Constants.actionMenuNumButtons) && (i < currentOption.subOptions.Count); i++, buttonIndex++)
     {
       slotButtons[buttonIndex].SetActive(true);
-      slotButtons[buttonIndex].transform.Find("Button").GetComponentInChildren<Text>().text = currentOptionList[i].optionName;
-      slotCallbacks[buttonIndex] = currentOptionList[i].callback;
+      slotButtons[buttonIndex].transform.Find("Button").GetComponentInChildren<Text>().text = currentOption.subOptions[i].optionName;
+      slotCallbacks[buttonIndex] = currentOption.subOptions[i].callback;
     }
 
     while(buttonIndex < Constants.actionMenuNumButtons)
@@ -79,6 +89,42 @@ public class ActionMenuScript : MonoBehaviour
       slotButtons[buttonIndex].SetActive(false);
       buttonIndex++;
     }
+  }
+
+  private void UpdateBackButton()
+  {
+    if(currentOption.parentOption == null)
+    {
+      backButton.SetActive(false);
+    }
+    else
+    {
+      backButton.SetActive(true);
+    }
+  }
+
+  private void UpdateCurrentFrame()
+  {
+    totalFrames = (int)(currentOption.subOptions.Count / Constants.actionMenuNumButtons) + 1;
+    currentFrame = 0;
+  }
+
+  private bool StepIntoChildOption(int index)
+  {
+    currentOption = currentOption.subOptions[currentFrame * Constants.actionMenuNumButtons + index];
+    if (currentOption.subOptions != null && currentOption.subOptions.Count > 0)
+    {
+      UpdateCurrentFrame();
+      UpdateUpDownButtons();
+      UpdateSlotButtons();
+      UpdateBackButton();
+
+      return true;
+    }
+
+    currentOption = currentOption.parentOption;
+
+    return false;
   }
 
   public void Up()
@@ -97,7 +143,12 @@ public class ActionMenuScript : MonoBehaviour
 
   public void Back()
   {
+    currentOption = currentOption.parentOption;
 
+    UpdateCurrentFrame();
+    UpdateUpDownButtons();
+    UpdateSlotButtons();
+    UpdateBackButton();
   }
 
   public void Cancel()
@@ -111,12 +162,13 @@ public class ActionMenuScript : MonoBehaviour
 
     currentPiece = StateManager.GetInstance().GetCurrentPiece();
     pieceName.text = currentPiece.GetComponent<BasePieceScript>().pieceName;
-    currentOptionList = currentPiece.GetComponent<BasePieceScript>().GetOptions();
 
-    totalFrames = (int)(currentOptionList.Count / Constants.actionMenuNumButtons) + 1;
-    currentFrame = 0;
+    currentOption = currentPiece.GetComponent<BasePieceScript>().GetOption();
+
+    UpdateCurrentFrame();
     UpdateUpDownButtons();
     UpdateSlotButtons();
+    UpdateBackButton();
   }
 
   public void OnExitPlayingActionState()
@@ -145,6 +197,6 @@ public class ActionMenuScript : MonoBehaviour
     StateManager.GetInstance().AddCallback(CallbackType.STATE_ENTER, GameState.PLAYING_ACTION, OnEnterPlayingActionState);
     StateManager.GetInstance().AddCallback(CallbackType.STATE_EXIT, GameState.PLAYING_ACTION, OnExitPlayingActionState);
 
-    currentSelection = null;
+    currentOption = null;
   }
 }
