@@ -41,6 +41,8 @@ public static class Constants
 {
   //public float cameraSpeed = 10;
 
+  public static int actionMenuNumButtons = 4;
+
   public static Color lightRed = new Color(0.9607844f, 0.4117647f, 0.4117647f, 1.0f);
   public static Color red = new Color(1.0f, 0.0f, 0.0f, 1.0f);
   public static Color lightBlue = new Color(0.3960785f, 0.627451f, 0.9215687f, 1.0f);
@@ -56,6 +58,7 @@ public static class Constants
   public static float mapRotationSpeed = 10f;
 
   public delegate void StateChangeCallback();
+  public delegate void OptionActionCallback();
 
   public static Color EnumToHighlightColor(MapColor colorIn)
   {

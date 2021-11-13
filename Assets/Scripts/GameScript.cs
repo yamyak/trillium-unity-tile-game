@@ -6,7 +6,7 @@ public class GameScript : MonoBehaviour
   private StateManager stateManager;
   private GameObject map;
 
-  Player[] players;
+  private Player[] players;
 
   public void OnEnterPlayingBasicState()
   {

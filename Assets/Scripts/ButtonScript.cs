@@ -23,4 +23,9 @@ public class ButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     transform.GetComponent<Button>().colors = color;
     transform.Find("Text").GetComponent<Text>().color = Color.black;
   }
+
+  public void OnDisable()
+  {
+    transform.Find("Text").GetComponent<Text>().color = Color.black;
+  }
 }

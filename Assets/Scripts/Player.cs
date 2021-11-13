@@ -6,12 +6,12 @@ public class Player
 {
   private GameObject map;
 
-  List<GameObject> pieces;
+  private List<GameObject> pieces;
 
   private MapColor color;
 
-  Thread handler;
-  BaseAlgorithm algorithm;
+  private Thread handler;
+  private BaseAlgorithm algorithm;
 
   public Player(GameObject map, MapColor color, string algo, int x, int y)
   {
@@ -34,6 +34,8 @@ public class Player
     {
       AddPiece(piece);
     }
+
+    StateManager.GetInstance().AddCallback(CallbackType.STATE_ENTER, GameState.READY, OnEnterReadyState);
   }
 
   public void ProcessMove()
@@ -57,5 +59,13 @@ public class Player
   public void AddPiece(GameObject piece)
   {
     pieces.Add(piece);
+  }
+
+  public void OnEnterReadyState()
+  {
+    foreach (GameObject obj in pieces)
+    {
+      obj.GetComponent<PieceScript>().SetActive(false);
+    }
   }
 }

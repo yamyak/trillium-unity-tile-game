@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -10,22 +9,19 @@ public class PieceScript : MonoBehaviour
 
   private bool active;
 
-  private StateManager stateManager;
+  protected StateManager stateManager;
   private GameObject map;
 
   public string pieceName;
-  public List<Location> moveLocations;
-  public List<Location> attackLocations;
+
+  protected List<Option> options;
 
   // Start is called before the first frame update
   void Start()
   {
     stateManager = StateManager.GetInstance();
-  }
 
-  // Update is called once per frame
-  void Update()
-  {
+    options = new List<Option>();
   }
 
   public void Intialize(bool active, GameObject map, MapColor color)
@@ -67,8 +63,8 @@ public class PieceScript : MonoBehaviour
     }
   }
 
-  public string GetPieceName()
+  public List<Option> GetOptions()
   {
-    return pieceName;
+    return options;
   }
 }
