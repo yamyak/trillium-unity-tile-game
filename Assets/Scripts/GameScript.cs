@@ -24,6 +24,7 @@ public class GameScript : MonoBehaviour
   void Start()
   {
     stateManager = StateManager.GetInstance();
+    ActionStateManager.GetInstance();
     map = transform.Find("Map").gameObject;
 
     players = new Player[2];

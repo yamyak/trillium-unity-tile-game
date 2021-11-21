@@ -7,5 +7,5 @@ public class Option
   public string optionName { get; set; }
   public Option parentOption { get; set; }
   public List<Option> subOptions;
-  public Constants.OptionActionCallback callback { get; set; }
+  public Constants.OptionActionCallback actionCallback { get; set; }
 }

@@ -29,13 +29,13 @@ public class Player
       algorithm = new ComputerAlgorithm();
     }
 
-    GameObject piece = map.GetComponent<MapScript>().AddPieceToMap("Base", x, y, this.color, false);
+    GameObject piece = map.GetComponent<MapScript>().AddPieceToMap("Base", x, y, this.color);
     if(piece != null)
     {
       AddPiece(piece);
     }
 
-    StateManager.GetInstance().AddCallback(CallbackType.STATE_ENTER, GameState.READY, OnEnterReadyState);
+    StateManager.GetInstance().AddCallback(CallbackType.STATE_EXIT, GameState.PLAYING_BASIC, OnExitPlayingBasic);
   }
 
   public void ProcessMove()
@@ -61,7 +61,7 @@ public class Player
     pieces.Add(piece);
   }
 
-  public void OnEnterReadyState()
+  public void OnExitPlayingBasic()
   {
     foreach (GameObject obj in pieces)
     {

@@ -13,54 +13,47 @@ public class MapScript : MonoBehaviour
   private bool activeInput = true;
   private float completedDegrees, direction;
 
-  private Vector3 CalculateLocation(int xCell, int yCell, float zLoc)
-  {
-    return new Vector3((Constants.tileLength / 2) + (Constants.tileLength + Constants.tileBuffer) * xCell,
-        (Constants.tileLength / 2) + (Constants.tileLength + Constants.tileBuffer) * yCell, zLoc);
-  }
-
   public void MovePieceOnMap(int xOld, int yOld, int xNew, int yNew)
   {
     grid[xOld, yOld, 1].GetComponent<PieceScript>().SetLocation(xNew, yNew);
     grid[xNew, yNew, 1] = grid[xOld, yOld, 1];
     grid[xOld, yOld, 1] = null;
 
-    grid[xNew, yNew, 1].transform.position = CalculateLocation(xNew, yNew, grid[xNew, yNew, 1].transform.position.z);
+    grid[xNew, yNew, 1].transform.position = Constants.CalculateLocation(xNew, yNew, grid[xNew, yNew, 1].transform.position.z);
   }
 
-  public GameObject AddPieceToMap(string pieceName, int x, int y, MapColor color, bool active)
+  public bool ValidLocation(int x, int y)
+  {
+    if(x < 0 || x >= MainMenuScript.mapLength || y < 0 || y >= MainMenuScript.mapLength)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  public GameObject AddPieceToMap(string pieceName, int x, int y, MapColor color)
   {
     GameObject piece = null;
 
     if(pieceName == "Base")
     {
-      piece = Instantiate(basePiece, CalculateLocation(x, y, -0.3f), Quaternion.identity);
+      piece = Instantiate(basePiece, Constants.CalculateLocation(x, y, -0.3f), Quaternion.identity);
     }
 
     if(piece != null)
     {
-      piece.GetComponent<PieceScript>().Intialize(active, this.gameObject, color);
+      piece.GetComponent<PieceScript>().Intialize(this.gameObject, color, x, y);
 
       grid[x, y, 1] = piece;
-      grid[x, y, 1].GetComponent<PieceScript>().SetLocation(x, y);
     }
 
     return piece;
   }
 
-  public void SetCellColor(int x, int y, MapColor color)
+  public GameObject GetCell(int x, int y)
   {
-    grid[x, y, 0].GetComponent<TileScript>().SetCellColor(color);
-  }
-
-  public void SetHighlightColor(int x, int y, MapColor color)
-  {
-    grid[x, y, 0].GetComponent<TileScript>().SetHighlightColor(color);
-  }
-
-  public void ActivateHighlight(int x, int y, bool active)
-  {
-    grid[x, y, 0].GetComponent<TileScript>().ActivateHighlight(active);
+    return grid[x, y, 0];
   }
 
   // Start is called before the first frame update
@@ -78,8 +71,9 @@ public class MapScript : MonoBehaviour
     {
       for(int j = 0; j < side; j++)
       {
-        GameObject obj = Instantiate(tile, CalculateLocation(i, j, 0), Quaternion.identity);
+        GameObject obj = Instantiate(tile, Constants.CalculateLocation(i, j, 0.02f), Quaternion.identity);
         obj.transform.parent = this.transform;
+        obj.GetComponent<TileScript>().SetLocation(i, j);
         obj.GetComponent<TileScript>().SetCellColor(MapColor.WHITE);
         grid[i, j, 0] = obj;
         grid[i, j, 1] = null;

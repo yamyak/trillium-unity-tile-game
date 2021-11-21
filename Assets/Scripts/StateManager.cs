@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections.Generic;
 
 public sealed class StateManager
@@ -10,7 +9,6 @@ public sealed class StateManager
   private static GameState state;
   private static GameState lastState;
 
-  private static GameObject currentPiece;
   private static int currentPlayer;
 
   private static Dictionary<GameState, List<Constants.StateChangeCallback>> stateEnterCallbacks;
@@ -121,16 +119,6 @@ public sealed class StateManager
     }
 
     ExerciseCallbacks(state, pastState);
-  }
-
-  public void SetCurrentPiece(GameObject piece)
-  {
-    currentPiece = piece;
-  }
-
-  public GameObject GetCurrentPiece()
-  {
-    return currentPiece;
   }
 
   public void SwitchToNextPlayer()

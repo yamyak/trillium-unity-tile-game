@@ -1969,11 +1969,7 @@ MonoBehaviour:
   player2TypeDD: {fileID: 1136048045}
   player2ColorDD: {fileID: 1662504076}
   mapSizeDD: {fileID: 402645783}
-  tile: {fileID: 8615689726722388672, guid: e343aabe27e51d14d98b845aea2d13dc, type: 3}
-  side: 100
-  tileLength: 1
-  tileBuffer: 0.25
-  speed: 5
+  tile: {fileID: 2440859028152835265, guid: c7f46f6f75e0d8e4890430fe7972cc66, type: 3}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

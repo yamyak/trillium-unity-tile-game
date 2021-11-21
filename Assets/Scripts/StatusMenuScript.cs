@@ -13,6 +13,7 @@ public class StatusMenuScript : MonoBehaviour
 
   public void EndTurn()
   {
+    ActionStateManager.GetInstance().CleanUp();
     StateManager.GetInstance().SetState(GameState.READY);
   }
 

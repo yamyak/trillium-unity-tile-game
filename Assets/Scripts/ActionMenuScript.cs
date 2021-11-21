@@ -1,202 +1,101 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ActionMenuScript : MonoBehaviour
 {
+  private ActionStateManager actionManager;
+
   private GameObject actionMenu;
-  
-  private GameObject currentPiece;
   private Text pieceName;
 
-  private GameObject[] slotButtons;
-  private GameObject upButton;
-  private GameObject downButton;
-  private GameObject backButton;
+  private Dictionary<ActionButton, GameObject> actionButtons;
 
-  private Constants.OptionActionCallback[] slotCallbacks;
+  public void ActivateButton(ActionButton button, bool active)
+  {
+    actionButtons[button].SetActive(active);
+  }
 
-  private int currentFrame;
-  private int totalFrames;
-  private Option currentOption;
+  public void SetPieceName(string name)
+  {
+    pieceName.text = name;
+  }
+
+  public void SetButtonText(ActionButton button, string text)
+  {
+    actionButtons[button].transform.Find("Button").GetComponentInChildren<Text>().text = text;
+  }
 
   public void SelectSlot1()
   {
-    if(!StepIntoChildOption(0))
-    {
-      slotCallbacks[0]();
-    }
+    actionManager.ClickButton(ActionButton.ACTION1);
   }
 
   public void SelectSlot2()
   {
-
-    if (!StepIntoChildOption(1))
-    {
-      slotCallbacks[1]();
-    }
+    actionManager.ClickButton(ActionButton.ACTION2);
   }
 
   public void SelectSlot3()
   {
-    if (!StepIntoChildOption(2))
-    {
-      slotCallbacks[2]();
-    }
+    actionManager.ClickButton(ActionButton.ACTION3);
   }
 
   public void SelectSlot4()
   {
-    if (!StepIntoChildOption(3))
-    {
-      slotCallbacks[3]();
-    }
-  }
-
-  private void UpdateUpDownButtons()
-  {
-    if (currentFrame + 1 == totalFrames)
-    {
-      downButton.SetActive(false);
-    }
-    else
-    {
-      downButton.SetActive(true);
-    }
-
-    if (currentFrame == 0)
-    {
-      upButton.SetActive(false);
-    }
-    else
-    {
-      upButton.SetActive(true);
-    }
-  }
-
-  private void UpdateSlotButtons()
-  {
-    int buttonIndex = 0;
-    int frameStart = Constants.actionMenuNumButtons * currentFrame;
-    for (int i = frameStart; (buttonIndex < Constants.actionMenuNumButtons) && (i < currentOption.subOptions.Count); i++, buttonIndex++)
-    {
-      slotButtons[buttonIndex].SetActive(true);
-      slotButtons[buttonIndex].transform.Find("Button").GetComponentInChildren<Text>().text = currentOption.subOptions[i].optionName;
-      slotCallbacks[buttonIndex] = currentOption.subOptions[i].callback;
-    }
-
-    while(buttonIndex < Constants.actionMenuNumButtons)
-    {
-      slotButtons[buttonIndex].SetActive(false);
-      buttonIndex++;
-    }
-  }
-
-  private void UpdateBackButton()
-  {
-    if(currentOption.parentOption == null)
-    {
-      backButton.SetActive(false);
-    }
-    else
-    {
-      backButton.SetActive(true);
-    }
-  }
-
-  private void UpdateCurrentFrame()
-  {
-    totalFrames = (int)(currentOption.subOptions.Count / Constants.actionMenuNumButtons) + 1;
-    currentFrame = 0;
-  }
-
-  private bool StepIntoChildOption(int index)
-  {
-    currentOption = currentOption.subOptions[currentFrame * Constants.actionMenuNumButtons + index];
-    if (currentOption.subOptions != null && currentOption.subOptions.Count > 0)
-    {
-      UpdateCurrentFrame();
-      UpdateUpDownButtons();
-      UpdateSlotButtons();
-      UpdateBackButton();
-
-      return true;
-    }
-
-    currentOption = currentOption.parentOption;
-
-    return false;
+    actionManager.ClickButton(ActionButton.ACTION4);
   }
 
   public void Up()
   {
-    currentFrame--;
-    UpdateUpDownButtons();
-    UpdateSlotButtons();
+    actionManager.ClickButton(ActionButton.UP);
   }
 
   public void Down()
   {
-    currentFrame++;
-    UpdateUpDownButtons();
-    UpdateSlotButtons();
+    actionManager.ClickButton(ActionButton.DOWN);
   }
 
   public void Back()
   {
-    currentOption = currentOption.parentOption;
-
-    UpdateCurrentFrame();
-    UpdateUpDownButtons();
-    UpdateSlotButtons();
-    UpdateBackButton();
+    actionManager.ClickButton(ActionButton.BACK);
   }
 
   public void Cancel()
   {
-    StateManager.GetInstance().SetState(GameState.PLAYING_BASIC);
+    actionManager.ClickButton(ActionButton.CANCEL);
   }
 
   public void OnEnterPlayingActionState()
   {
     actionMenu.SetActive(true);
-
-    currentPiece = StateManager.GetInstance().GetCurrentPiece();
-    pieceName.text = currentPiece.GetComponent<BasePieceScript>().pieceName;
-
-    currentOption = currentPiece.GetComponent<BasePieceScript>().GetOption();
-
-    UpdateCurrentFrame();
-    UpdateUpDownButtons();
-    UpdateSlotButtons();
-    UpdateBackButton();
   }
 
   public void OnExitPlayingActionState()
   {
-    pieceName.text = currentPiece.GetComponent<BasePieceScript>().pieceName;
     actionMenu.SetActive(false);
-    currentPiece = null;
   }
 
   // Start is called before the first frame update
   void Start()
   {
+    actionManager = ActionStateManager.GetInstance();
+    actionManager.SetMenuScript(this);
+
     actionMenu = transform.Find("Action Menu").gameObject;
     pieceName = transform.Find("Action Menu/Piece Name").GetComponent<Text>();
 
-    slotCallbacks = new Constants.OptionActionCallback[4];
-    slotButtons = new GameObject[4];
-    slotButtons[0] = transform.Find("Action Menu/Action Panel/Slot 1 Button").gameObject;
-    slotButtons[1] = transform.Find("Action Menu/Action Panel/Slot 2 Button").gameObject;
-    slotButtons[2] = transform.Find("Action Menu/Action Panel/Slot 3 Button").gameObject;
-    slotButtons[3] = transform.Find("Action Menu/Action Panel/Slot 4 Button").gameObject;
-    upButton = transform.Find("Action Menu/Action Panel/Up Button").gameObject;
-    downButton = transform.Find("Action Menu/Action Panel/Down Button").gameObject;
-    backButton = transform.Find("Action Menu/Action Panel/Back Button").gameObject;
+    actionButtons = new Dictionary<ActionButton, GameObject>();
+    actionButtons.Add(ActionButton.ACTION1, transform.Find("Action Menu/Action Panel/Slot 1 Button").gameObject);
+    actionButtons.Add(ActionButton.ACTION2, transform.Find("Action Menu/Action Panel/Slot 2 Button").gameObject);
+    actionButtons.Add(ActionButton.ACTION3, transform.Find("Action Menu/Action Panel/Slot 3 Button").gameObject);
+    actionButtons.Add(ActionButton.ACTION4, transform.Find("Action Menu/Action Panel/Slot 4 Button").gameObject);
+    actionButtons.Add(ActionButton.UP, transform.Find("Action Menu/Action Panel/Up Button").gameObject);
+    actionButtons.Add(ActionButton.DOWN, transform.Find("Action Menu/Action Panel/Down Button").gameObject);
+    actionButtons.Add(ActionButton.BACK, transform.Find("Action Menu/Action Panel/Back Button").gameObject);
+    actionButtons.Add(ActionButton.CANCEL, transform.Find("Action Menu/Action Panel/Cancel Button").gameObject);
 
     StateManager.GetInstance().AddCallback(CallbackType.STATE_ENTER, GameState.PLAYING_ACTION, OnEnterPlayingActionState);
     StateManager.GetInstance().AddCallback(CallbackType.STATE_EXIT, GameState.PLAYING_ACTION, OnExitPlayingActionState);
-
-    currentOption = null;
   }
 }

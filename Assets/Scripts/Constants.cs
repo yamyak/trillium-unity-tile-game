@@ -18,6 +18,18 @@ public enum GameState
   GAME_OVER
 }
 
+public enum ActionButton
+{
+  ACTION1 = 0,
+  ACTION2 = 1,
+  ACTION3 = 2,
+  ACTION4 = 3,
+  UP = 4,
+  DOWN = 5,
+  BACK = 6,
+  CANCEL = 7
+}
+
 public enum CallbackType
 {
   STATE_ENTER,
@@ -59,6 +71,13 @@ public static class Constants
 
   public delegate void StateChangeCallback();
   public delegate void OptionActionCallback();
+  public delegate void OptionTileCallback(int x, int y);
+
+  public static Vector3 CalculateLocation(int xCell, int yCell, float zLoc)
+  {
+    return new Vector3((tileLength / 2) + (tileLength + tileBuffer) * xCell,
+        (tileLength / 2) + (tileLength + tileBuffer) * yCell, zLoc);
+  }
 
   public static Color EnumToHighlightColor(MapColor colorIn)
   {
