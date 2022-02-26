@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// possible options for tile colors
 public enum MapColor
 {
   BLACK = 0,
@@ -9,6 +10,7 @@ public enum MapColor
   BLUE = 4
 }
 
+// game states
 public enum GameState
 {
   READY,
@@ -18,6 +20,7 @@ public enum GameState
   GAME_OVER
 }
 
+// button options on action menu
 public enum ActionButton
 {
   ACTION1 = 0,
@@ -30,6 +33,8 @@ public enum ActionButton
   CANCEL = 7
 }
 
+// callback type
+// called when entering a state, exiting a state, or when a state changes
 public enum CallbackType
 {
   STATE_ENTER,
@@ -37,6 +42,7 @@ public enum CallbackType
   STATE_CHANGE
 }
 
+// location (both x and y values)
 public struct Location
 {
   public Location(int x, int y)
@@ -51,34 +57,41 @@ public struct Location
 
 public static class Constants
 {
-  //public float cameraSpeed = 10;
-
   public static int actionMenuNumButtons = 4;
 
+  // tile and tile highlight colors
   public static Color lightRed = new Color(0.9607844f, 0.4117647f, 0.4117647f, 1.0f);
   public static Color red = new Color(1.0f, 0.0f, 0.0f, 1.0f);
   public static Color lightBlue = new Color(0.3960785f, 0.627451f, 0.9215687f, 1.0f);
   public static Color blue = new Color(0.0f, 0.3058824f, 1.0f, 1.0f);
 
+  // tile object sizes
   public static float tileLength = 1.0f;
   public static float tileBuffer = 0.25f;
 
+  // main menu background options
   public static int mainMenuMapSize = 100;
   public static float mainMenuBgSpeed = 5.0f;
 
+  // game camera movement speed
   public static float cameraSpeed = 10f;
+  // game camera rotation speed
   public static float mapRotationSpeed = 10f;
 
+  // callback delegates
   public delegate void StateChangeCallback();
   public delegate void OptionActionCallback();
   public delegate void OptionTileCallback(int x, int y);
 
+  // calculate tile location based on x and y coordinates
+  // z location is just a pass-through
   public static Vector3 CalculateLocation(int xCell, int yCell, float zLoc)
   {
     return new Vector3((tileLength / 2) + (tileLength + tileBuffer) * xCell,
         (tileLength / 2) + (tileLength + tileBuffer) * yCell, zLoc);
   }
 
+  // get tile highlight color based on tile color enum
   public static Color EnumToHighlightColor(MapColor colorIn)
   {
     Color color = Color.gray;
@@ -98,6 +111,7 @@ public static class Constants
     return color;
   }
 
+  // get tile color based on tile color enum
   public static Color EnumToCellColor(MapColor colorIn)
   {
     Color color = Color.white;
