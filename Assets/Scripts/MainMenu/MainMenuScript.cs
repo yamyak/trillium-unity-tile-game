@@ -19,8 +19,8 @@ public class MainMenuScript : MonoBehaviour
   public Dropdown player2TypeDD;
   // player 2 color selection dropdown
   public Dropdown player2ColorDD;
-  // map size selection dropdown
-  public Dropdown mapSizeDD;
+  // map size input field
+  public InputField mapSizeInput;
 
   // tile item
   // uses for main menu background animation
@@ -30,16 +30,17 @@ public class MainMenuScript : MonoBehaviour
   private float midPoint;
 
   // player type selection dropdown options
-  public static string[] playerType = { "Human", "Computer" };
-  // player color selection dropdown options
-  public static MapColor[] playerColor = { MapColor.RED, MapColor.BLUE };
+  public string[] playerType = { "Human", "Computer" };
 
   // base game map lengths
-  public static int mapLength = 100;
+  public int mapLength = 100;
 
   // called when "Start Game" button is selected
   public void LoadLevel(string levelName)
   {
+    // TODO: need to valdiate input
+    mapLength = Int32.Parse(mapSizeInput.text);
+
     // switches to the next scene
     SceneManager.LoadScene(levelName);
   }
@@ -107,8 +108,6 @@ public class MainMenuScript : MonoBehaviour
     
     // add callback function called when player 1 color dropdown selection changed
     player1ColorDD.onValueChanged.AddListener(delegate {
-      playerColor[0] = (MapColor)Enum.Parse(typeof(MapColor), player1ColorDD.captionText.text, true);
-
       // change player 1 type dropdown color
       ChangeDropdownColor(player1ColorDD.captionText.text, player1TypeDD);
       // change player 1 color dropdown color
@@ -117,8 +116,6 @@ public class MainMenuScript : MonoBehaviour
 
     // add callback function called when player 2 color dropdown selection changed
     player2ColorDD.onValueChanged.AddListener(delegate {
-      playerColor[1] = (MapColor)Enum.Parse(typeof(MapColor), player2ColorDD.captionText.text, true);
-
       // change player 2 type dropdown color
       ChangeDropdownColor(player2ColorDD.captionText.text, player2TypeDD);
       // change player 2 color dropdown color
@@ -137,14 +134,6 @@ public class MainMenuScript : MonoBehaviour
     {
       // update the player 2 type flag
       playerType[1] = player2TypeDD.captionText.text;
-    });
-
-    // add callback function called when map size dropdown selection changed
-    mapSizeDD.onValueChanged.AddListener(delegate
-    {
-      // map size options are 100, 200, or 300
-      // multiply option selected by base size
-      mapLength = (mapSizeDD.value + 1) * 100;
     });
 
     // create background animation tiles in 2d matrix formation
@@ -176,5 +165,16 @@ public class MainMenuScript : MonoBehaviour
   {
     // rotate the camera around the 2d matrix
     transform.RotateAround(new Vector3(midPoint, midPoint, 0), Vector3.back, Constants.mainMenuBgSpeed * Time.deltaTime);
+  }
+
+  // Called when scene switched
+  void OnDisable()
+  {
+    // save all user preferences to be loaded next scene
+    PlayerPrefs.SetInt("size", mapLength);
+    PlayerPrefs.SetString("player1", playerType[0]);
+    PlayerPrefs.SetString("player2", playerType[1]);
+    PlayerPrefs.SetString("color1", player1ColorDD.captionText.text);
+    PlayerPrefs.SetString("color2", player2ColorDD.captionText.text);
   }
 }

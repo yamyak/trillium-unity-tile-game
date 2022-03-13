@@ -15,7 +15,7 @@ public class CameraScript : MonoBehaviour
     active = true;
 
     // retrieve the selected map length from main menu scene
-    float side = MainMenuScript.mapLength;
+    float side = PlayerPrefs.GetInt("size");
     // calculate length of side of map
     sideLength = ((float)side * Constants.tileLength) + ((float)(side - 1) * Constants.tileBuffer);
 

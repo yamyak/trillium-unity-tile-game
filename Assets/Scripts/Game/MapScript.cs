@@ -22,6 +22,9 @@ public class MapScript : MonoBehaviour
   // degrees map has rotated and which direction
   private float completedDegrees, direction;
 
+  // map size
+  private int mapSize;
+
   // move a piece on the map
   public void MovePieceOnMap(int xOld, int yOld, int xNew, int yNew)
   {
@@ -37,7 +40,7 @@ public class MapScript : MonoBehaviour
   // verify that coordinates provided do not exceed bounds of map
   public bool ValidLocation(int x, int y)
   {
-    if(x < 0 || x >= MainMenuScript.mapLength || y < 0 || y >= MainMenuScript.mapLength)
+    if(x < 0 || x >= mapSize || y < 0 || y >= mapSize)
     {
       return false;
     }
@@ -82,19 +85,19 @@ public class MapScript : MonoBehaviour
   void Start()
   {
     stateManager = StateManager.GetInstance();
-    int side = MainMenuScript.mapLength;
+    mapSize = PlayerPrefs.GetInt("size");
 
     // initialize the grid
-    grid = new GameObject[side, side, 2];
+    grid = new GameObject[mapSize, mapSize, 2];
 
     // calculate midpoint of map and move map so bottom left edge is at origin
-    float midPoint = (((float)side * Constants.tileLength) + ((float)(side - 1) * Constants.tileBuffer)) / 2;
+    float midPoint = (((float)mapSize * Constants.tileLength) + ((float)(mapSize - 1) * Constants.tileBuffer)) / 2;
     this.transform.position = new Vector3(midPoint, midPoint, 0);
 
     // iterate through map coordinates
-    for(int i = 0; i < side; i++)
+    for(int i = 0; i < mapSize; i++)
     {
-      for(int j = 0; j < side; j++)
+      for(int j = 0; j < mapSize; j++)
       {
         // create tile object and add to map
         GameObject obj = Instantiate(tile, Constants.CalculateLocation(i, j, 0.02f), Quaternion.identity);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,10 +37,14 @@ public class GameScript : MonoBehaviour
     // get the game map
     map = transform.Find("Map").gameObject;
 
+    
+
     // create the players
     players = new Player[2];
-    players[0] = new Player(map, MainMenuScript.playerColor[0], MainMenuScript.playerType[0], 0, 0);
-    players[1] = new Player(map, MainMenuScript.playerColor[1], MainMenuScript.playerType[1], (MainMenuScript.mapLength - 1), (MainMenuScript.mapLength - 1));
+    MapColor color1 = (MapColor)Enum.Parse(typeof(MapColor), PlayerPrefs.GetString("color1"), true);
+    players[0] = new Player(map, color1, PlayerPrefs.GetString("player1"), 0, 0);
+    MapColor color2 = (MapColor)Enum.Parse(typeof(MapColor), PlayerPrefs.GetString("color2"), true);
+    players[1] = new Player(map, color2, PlayerPrefs.GetString("player2"), (PlayerPrefs.GetInt("size") - 1), (PlayerPrefs.GetInt("size") - 1));
 
     // register the callbacks
     stateManager.AddCallback(CallbackType.STATE_ENTER, GameState.PLAYING_BASIC, OnEnterPlayingBasicState);
